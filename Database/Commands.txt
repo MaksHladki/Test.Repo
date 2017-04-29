@@ -1,0 +1,3 @@
+Add-Migration -ProjectName "Repo.DAL" -ConnectionString "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\maksim.hladki\Dropbox\Repo\Database\Database.mdf;Integrated Security=True;" -Name "Initial"  -ConnectionProviderName "System.Data.SqlClient"
+
+Update-Database  -ProjectName "Repo.DAL" -ConnectionString "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\maksim.hladki\Dropbox\Repo\Database\Database.mdf;Integrated Security=True;"  -ConnectionProviderName "System.Data.SqlClient"  -Verbose
