@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Autofac;
 using Repo.DAL.Context;
 using Repo.DAL.Infrastructure;
@@ -22,13 +23,24 @@ namespace Repo.UI.Configurations
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
 
+
             //Validators
             builder.RegisterType(typeof(ValidationProvider)).As(typeof(IValidationProvider)).InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(Assembly.Load("Repo.BAL"))
                 .Where(t => t.Name.EndsWith("Validator"))
-                .AsImplementedInterfaces()
+                .AsClosedTypesOf(typeof(Validator<>))
                 .InstancePerLifetimeScope();
+
+            builder.Register<Func<Type, IValidator>>(c =>
+            {
+                var cc = c.Resolve<IComponentContext>();
+                return type =>
+                {
+                    var valType = typeof(Validator<>).MakeGenericType(type);
+                    return (IValidator)cc.Resolve(valType);
+                };
+            });
 
             return builder.Build();
         }
